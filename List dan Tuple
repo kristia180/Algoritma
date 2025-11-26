@@ -21,6 +21,6 @@ data_mahasiswa = ("Kristia", 19,
 ["D0425322", "Sisfo A"]) 
 
 # List di dalam tuple bisa diubah, tetapi tuple-nya tetap tidak bisa diubah
-data_mahasiswa[2].append("Pemrograman") 
+data_mahasiswa[2].append("Algoritma") 
 
 print(data_mahasiswa) 
