@@ -1,0 +1,169 @@
+import tkinter as tk
+import random
+
+# Variabel Global
+players = ["x", "o"]
+# Memilih pemain secara acak untuk memulai
+player = random.choice(players)
+# List 2D untuk menyimpan objek tombol (papan permainan)
+buttons = [[0, 0, 0],
+           [0, 0, 0],
+           [0, 0, 0]]
+
+def next_turn(row, column):
+    """Mengatur giliran berikutnya setelah tombol diklik."""
+    global player
+
+    # [00:07:25] Cek apakah tombol kosong dan belum ada pemenang
+    if buttons[row][column]['text'] == "" and check_winner() is False:
+
+        # Pemain Pertama ('x')
+        if player == players[0]:
+            
+            buttons[row][column].config(text=player) # Set simbol pemain
+            
+            result = check_winner()
+            if result is False:
+                # [00:09:05] Tukar pemain
+                player = players[1]
+                label.config(text=(players[1] + " turn"))
+            elif result is True:
+                # Pemenang
+                label.config(text=(players[0] + " wins"))
+            elif result == "Tie":
+                # Seri
+                label.config(text="Tie!")
+                for r in range(3):
+                    for c in range(3):
+                        buttons[r][c].config(bg="#FFFF00") # Ubah ke kuning
+
+        # Pemain Kedua ('o')
+        else:
+            
+            buttons[row][column].config(text=player) # Set simbol pemain
+            
+            result = check_winner()
+            if result is False:
+                # Tukar pemain
+                player = players[0]
+                label.config(text=(players[0] + " turn"))
+            elif result is True:
+                # Pemenang
+                label.config(text=(players[1] + " wins"))
+            elif result == "Tie":
+                # Seri
+                label.config(text="Tie!")
+                for r in range(3):
+                    for c in range(3):
+                        buttons[r][c].config(bg="#FFFF00") # Ubah ke kuning
+
+
+def check_winner():
+    """
+    [00:11:44] Memeriksa semua kondisi menang (horizontal, vertikal, diagonal) 
+    dan kondisi seri.
+    """
+    # Cek Horizontal
+    for row in range(3):
+        if (buttons[row][0]['text'] == buttons[row][1]['text'] == buttons[row][2]['text'] != ""):
+            # [00:16:42] Ubah warna tombol pada baris pemenang menjadi hijau
+            buttons[row][0].config(bg="green")
+            buttons[row][1].config(bg="green")
+            buttons[row][2].config(bg="green")
+            return True
+
+    # Cek Vertikal
+    for column in range(3):
+        if (buttons[0][column]['text'] == buttons[1][column]['text'] == buttons[2][column]['text'] != ""):
+            # Ubah warna tombol pada kolom pemenang menjadi hijau
+            buttons[0][column].config(bg="green")
+            buttons[1][column].config(bg="green")
+            buttons[2][column].config(bg="green")
+            return True
+
+    # Cek Diagonal (kiri-atas ke kanan-bawah)
+    if (buttons[0][0]['text'] == buttons[1][1]['text'] == buttons[2][2]['text'] != ""):
+        # Ubah warna tombol pada diagonal pemenang menjadi hijau
+        buttons[0][0].config(bg="green")
+        buttons[1][1].config(bg="green")
+        buttons[2][2].config(bg="green")
+        return True
+
+    # Cek Diagonal (kanan-atas ke kiri-bawah)
+    elif (buttons[0][2]['text'] == buttons[1][1]['text'] == buttons[2][0]['text'] != ""):
+        # Ubah warna tombol pada diagonal pemenang menjadi hijau
+        buttons[0][2].config(bg="green")
+        buttons[1][1].config(bg="green")
+        buttons[2][0].config(bg="green")
+        return True
+
+    # [00:14:24] Cek kondisi Seri (tidak ada lagi ruang kosong)
+    elif empty_spaces() is False:
+        return "Tie"
+
+    # Belum ada pemenang
+    else:
+        return False
+
+def empty_spaces():
+    """
+    [00:15:11] Menghitung dan memeriksa apakah masih ada ruang kosong.
+    """
+    spaces = 9
+    
+    for row in range(3):
+        for column in range(3):
+            if buttons[row][column]['text'] != "":
+                spaces -= 1
+    
+    if spaces == 0:
+        return False # Tidak ada ruang kosong tersisa (Seri)
+    else:
+        return True # Masih ada ruang kosong
+
+
+def new_game():
+    """
+    [00:18:50] Memulai permainan baru dengan mereset papan dan giliran pemain.
+    """
+    global player
+    
+    # Pilih pemain baru secara acak untuk memulai
+    player = random.choice(players)
+    label.config(text=(player + " turn"))
+    
+    # Reset semua tombol (teks dan warna latar belakang)
+    for row in range(3):
+        for column in range(3):
+            buttons[row][column].config(text="", bg="#F0F0F0") # Warna default Tkinter
+
+# ----------------------------------------
+# Pengaturan Program Utama (Antarmuka Tkinter)
+# ----------------------------------------
+
+# [00:01:02] Membuat jendela utama
+window = tk.Tk()
+window.title("Tic-Tac-Toe")
+
+# [00:02:36] Label untuk menampilkan giliran pemain / pemenang
+label = tk.Label(text=player + " turn", font=('consolas', 40))
+label.pack(side="top")
+
+# [00:03:18] Tombol Reset/Restart
+reset_button = tk.Button(text="Restart", font=('consolas', 20), command=new_game)
+reset_button.pack(side="top")
+
+# [00:04:25] Frame untuk menampung tombol-tombol permainan
+frame = tk.Frame(window)
+frame.pack()
+
+# [00:04:47] Membuat grid tombol 3x3
+for row in range(3):
+    for column in range(3):
+        # Membuat tombol dan mengaitkannya dengan fungsi next_turn menggunakan lambda
+        buttons[row][column] = tk.Button(frame, text="", font=('consolas', 20), width=5, height=2,
+                                         command=lambda row=row, column=column: next_turn(row, column))
+        buttons[row][column].grid(row=row, column=column)
+
+# [00:01:10] Memulai loop utama Tkinter
+window.mainloop()
