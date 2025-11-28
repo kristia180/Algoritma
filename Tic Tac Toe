@@ -66,19 +66,19 @@ def check_winner():
     # Cek Horizontal
     for row in range(3):
         if (buttons[row][0]['text'] == buttons[row][1]['text'] == buttons[row][2]['text'] != ""):
-            # [00:16:42] Ubah warna tombol pada baris pemenang menjadi hijau
-            buttons[row][0].config(bg="green")
-            buttons[row][1].config(bg="green")
-            buttons[row][2].config(bg="green")
+            # [00:16:42] Ubah warna tombol pada baris pemenang menjadi biru
+            buttons[row][0].config(bg="blue")
+            buttons[row][1].config(bg="blue")
+            buttons[row][2].config(bg="blue")
             return True
 
     # Cek Vertikal
     for column in range(3):
         if (buttons[0][column]['text'] == buttons[1][column]['text'] == buttons[2][column]['text'] != ""):
-            # Ubah warna tombol pada kolom pemenang menjadi hijau
-            buttons[0][column].config(bg="green")
-            buttons[1][column].config(bg="green")
-            buttons[2][column].config(bg="green")
+            # Ubah warna tombol pada kolom pemenang menjadi merah
+            buttons[0][column].config(bg="red")
+            buttons[1][column].config(bg="red")
+            buttons[2][column].config(bg="red")
             return True
 
     # Cek Diagonal (kiri-atas ke kanan-bawah)
@@ -91,10 +91,10 @@ def check_winner():
 
     # Cek Diagonal (kanan-atas ke kiri-bawah)
     elif (buttons[0][2]['text'] == buttons[1][1]['text'] == buttons[2][0]['text'] != ""):
-        # Ubah warna tombol pada diagonal pemenang menjadi hijau
-        buttons[0][2].config(bg="green")
-        buttons[1][1].config(bg="green")
-        buttons[2][0].config(bg="green")
+        # Ubah warna tombol pada diagonal pemenang menjadi ungu
+        buttons[0][2].config(bg="purple")
+        buttons[1][1].config(bg="purple")
+        buttons[2][0].config(bg="purple")
         return True
 
     # [00:14:24] Cek kondisi Seri (tidak ada lagi ruang kosong)
